@@ -62,17 +62,22 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-# Part 1
+##########
+# Part 1 #
+##########
 
 # Activation
-a1 = [ones(m, 1) X];
 
-z2 = a1 * Theta1';
+a1 = X;
+a10 = [ones(m, 1) a1];
+
+z2 = a10 * Theta1';
 a2 = sigmoid(z2);
-a2 = [ones(m, 1) a2];
+a20 = [ones(m, 1) a2];
 
-z3 = a2 * Theta2';
-h = sigmoid(z3);
+z3 = a20 * Theta2';
+a3 = sigmoid(z3);
+h = a3;
 
 # cost function without regularization
 for k = 1: num_labels
@@ -89,10 +94,28 @@ reg = sum(T1(:).^2) + sum(T2(:).^2);
 
 J += reg * lambda/(2*m);
 
-# Part 2
+##########
+# Part 2 #
+##########
 
+delta3 = ones(m, num_labels);
+for k = 1 : num_labels
+  yk = y == k;
+  delta3(:,k) = h(:,k) - yk;
+endfor
+delta2 = delta3 * Theta2(:,2:end) .*  sigmoidGradient(z2);
 
+Delta2 = a20' * delta3;
+Delta1 = a10' * delta2;
 
+# regularization, first column zero
+temp1 = lambda * Theta1;
+temp1(1) = 0;
+temp2 = lambda * Theta2;
+temp2(1) = 0;
+
+Theta1_grad = (Delta1' + temp1)/m;
+Theta2_grad = (Delta2' + temp2)/m;
 
 % -------------------------------------------------------------
 
