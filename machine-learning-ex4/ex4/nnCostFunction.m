@@ -90,9 +90,9 @@ J *= 1/m;
 T1 = Theta1(:,2:end);
 T2 = Theta2(:,2:end);
 
-reg = sum(T1(:).^2) + sum(T2(:).^2);
+regularization = sum(T1(:).^2) + sum(T2(:).^2);
 
-J += reg * lambda/(2*m);
+J += regularization * lambda/(2*m);
 
 ##########
 # Part 2 #
@@ -109,13 +109,12 @@ Delta2 = a20' * delta3;
 Delta1 = a10' * delta2;
 
 # regularization, first column zero
-temp1 = lambda * Theta1;
-temp1(1) = 0;
-temp2 = lambda * Theta2;
-temp2(1) = 0;
 
-Theta1_grad = (Delta1' + temp1)/m;
-Theta2_grad = (Delta2' + temp2)/m;
+Theta1(:,1)=0;
+Theta2(:,1)=0;
+
+Theta1_grad = (Delta1' + lambda * Theta1)/m;
+Theta2_grad = (Delta2' + lambda * Theta2)/m;
 
 % -------------------------------------------------------------
 
