@@ -39,18 +39,19 @@ sigmavalues = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
 for i = 1:8
   for j = 1:8
 
-##    x1 = [1 2 1]; x2 = [0 4 -1];
-##    model = svmTrain(Xval, yval, Cval(i), @(x1, x2) gaussianKernel(x1, x2, sigmaval(j)));
-    Ctemp = Cvalues(i)
-    sigmatemp = sigmavalues(j)
+    Ctemp = Cvalues(i);
+    sigmatemp = sigmavalues(j);
     
-    x1 = Xval(:,1);
-    x2 = Xval(:,2);
+    x1 = [1 2 1]; x2 = [0 4 -1];
     model = svmTrain(Xval, yval, Ctemp, @(x1, x2) gaussianKernel(x1, x2, sigmatemp));
+
+##    x1 = Xval(:,1);
+##    x2 = Xval(:,2);
+##    model = svmTrain(Xval, yval, Ctemp, @(x1, x2) gaussianKernel(x1, x2, sigmatemp));
     
     predictions = svmPredict(model, Xval);
 
-    errtemp = mean(double(predictions ~= yval))
+    errtemp = mean(double(predictions ~= yval));
     
     if e > errtemp 
       e = errtemp;
